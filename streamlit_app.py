@@ -4,12 +4,13 @@ import pickle
 import time
 import matplotlib.pyplot as plt
 
+
 MEAN = -35.80143737792969
 STD = 16.67781639099121
 AUDIO_Y_LIMITS = (-32768, 32767) # Adjust as needed
 
-def display_prediction(placeholder, score):
-    label = 'Abnormal' if score > 0.5 else 'Normal'
+
+def display_prediction(placeholder, score, label):
     color = "green" if label == "Normal" else "red"
     placeholder.markdown(
         f"<div style='background-color:{color}; color:white; text-align:center; padding:10px; font-size:20px;'>"
@@ -42,8 +43,6 @@ def main():
     feature_plot_placeholder = col2.empty()
     
     prediction_placeholder = st.empty()
-
-    prediction_history = []
     
     while True:
         keys_mel = sorted(r.keys('mel_spec:*'))
@@ -60,10 +59,7 @@ def main():
 
             if prediction_score:
                 prediction_score = float(prediction_score)
-
-                # TODO: Implement storing mechanism - details from Kamila Domin
-                # prediction_history.append({'time': timestamp_mel, 'score': prediction_score})
-                # df = pd.DataFrame(prediction_history)
+                label = 'Abnormal' if prediction_score > 0.5 else 'Normal'
 
                 # Update audio plot
                 display_raw_audio(audio_plot_placeholder, raw_audio)
@@ -72,9 +68,9 @@ def main():
                 display_features(feature_plot_placeholder, mel_spec_db)
 
                 # Update prediction text
-                display_prediction(prediction_placeholder, prediction_score)
+                display_prediction(prediction_placeholder, prediction_score, label=label)
 
         time.sleep(0.1)
-
+   
 if __name__ == '__main__':
     main()

@@ -31,7 +31,7 @@ class SimpleCNN(nn.Module):
 def prediction_script():
     r = redis.Redis(host='localhost', port=6379, db=0)
     model = SimpleCNN()
-    model.load_state_dict(torch.load('cnn_model.pth', weights_only=True))
+    model.load_state_dict(torch.load('/home/philip/Desktop/prediction/cnn_model.pth', weights_only=True))
     model.eval()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)  # Move model to appropriate device
